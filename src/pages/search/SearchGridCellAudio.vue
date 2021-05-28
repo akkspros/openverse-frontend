@@ -45,7 +45,7 @@
         <span class="audio-duration">{{ duration }}</span>
       </p>
     </div>
-    <div ref='ws' class="waveform" />
+    <div ref="ws" class="waveform" />
   </div>
 </template>
 <script>
