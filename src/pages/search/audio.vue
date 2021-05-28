@@ -10,6 +10,7 @@
     <div class="search-grid-audio" v-if="wavesurferLoaded">
       <SearchGridCellAudio
         v-for="audio in audioList"
+        :key="audio.id"
         :audio-id="audio.id"
         :src="audio.src"
         :creator="audio.creator"
