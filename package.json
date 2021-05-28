@@ -57,7 +57,9 @@
     "patch-package": "^6.4.7",
     "sass-loader": "^10.0.1",
     "uuid": "^8.3.2",
-    "vue-i18n": "^8.24.3"
+    "vue-i18n": "^8.24.3",
+    "wavesurfer.js": "^5.0.1",
+    "wavesurfer.js-vue": "^1.0.0"
   },
   "devDependencies": {
     "@intlify/eslint-plugin-vue-i18n": "^0.11.1",

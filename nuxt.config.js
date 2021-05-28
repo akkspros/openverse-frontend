@@ -130,6 +130,7 @@ export default {
   plugins: [
     { src: '~/plugins/ab-test-init.js', mode: 'client' },
     { src: '~/plugins/ga.js', mode: 'client' },
+    { src: '~/plugins/wavesurfer-nuxt.client.js', mode: 'client' },
   ],
   css: [
     '~/assets/fonts.css',
@@ -170,5 +171,20 @@ export default {
       process.env.SENTRY_DSN ||
       'https://3f3e05dbe6994c318d1bf1c8bfcf71a1@o288582.ingest.sentry.io/1525413',
     lazy: true,
+  },
+  static: {
+    prefix: false,
+  },
+  build: {
+    // eslint-disable-next-line no-unused-vars
+    extend(config, ctx) {
+      config.module.rules.push({
+        test: /\.(ogg|mp3|wav|mpe?g)$/i,
+        loader: 'file-loader',
+        options: {
+          name: '[path][name].[ext]',
+        },
+      })
+    },
   },
 }
