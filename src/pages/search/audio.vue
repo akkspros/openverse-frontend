@@ -19,6 +19,7 @@
         :thumbnail="audio.thumbnail"
         :title="audio.title"
         :wavesurferCreator="wavesurferCreator"
+        :peaks="audio.peaks"
       />
     </div>
   </section>
@@ -36,6 +37,7 @@ export default {
     wavesurfer: null,
     wavesurferLoaded: false,
     wavesurferCreator: null,
+    currentlyPlaying: null,
     audioList: [
       {
         id: 'audio1',
@@ -57,19 +59,12 @@ export default {
         title: 'You and me',
         creator: 'JEKK',
         license: 'BY-NC-ND',
-        duration: '3:13',
+        duration: 5,
+        peaks: true,
       },
     ],
     isPlaying: false,
     // src: '/JekK_-_You_and_Me.mp3',
-    src:
-      'https://mp3d.jamendo.com/?trackid=1157358&format=mp32&from=lJVJyHNhRHiRDKae5Y5BtQ%3D%3D%7CgPkUAo5jXFVp%2FFGS7w5fYg%3D%3D',
-    thumbnail:
-      'https://images.jamendo.com/albums/s138/138887/covers/1.200.jpg?du=1532152255',
-    title: 'You and me',
-    creator: 'JEKK',
-    license: 'BY-NC-ND',
-    duration: '3:13',
   }),
   fetch() {
     if (this.$nuxt.context.wavesurfer) {

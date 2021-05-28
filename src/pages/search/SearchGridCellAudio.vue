@@ -60,6 +60,7 @@ export default {
     thumbnail: {},
     title: {},
     wavesurferCreator: {},
+    peaks: {},
   },
   data: () => ({
     wavesurfer: null,
@@ -75,9 +76,18 @@ export default {
     },
   }),
   mounted() {
-    console.log('Mounted ', this.$refs, this.$refs.ws)
     const wsOptions = { ...this.wsOptions, container: this.$refs.ws }
     this.wavesurfer = new this.wavesurferCreator.create(wsOptions)
+    console.log('peaks: ', this.peaks)
+    if (this.peaks) {
+      let newPeaks = []
+      const numPeaks = 1000
+      for (let i = 0; i < numPeaks; i++) {
+        newPeaks.push(Math.random())
+      }
+      this.wavesurfer.backend.setPeaks(newPeaks, numPeaks)
+    }
+    console.log(this.wavesurfer.backend)
     this.wavesurfer.load(this.src)
   },
   methods: {
