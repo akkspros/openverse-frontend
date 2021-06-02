@@ -2,10 +2,12 @@
   <!-- eslint-disable -->
   <div class="audio-container">
     <img
+      v-if="thumbnail"
       :alt="`audio thumbnail for ${title}`"
       class="audio-thumbnail"
       :src="thumbnail"
     />
+    <div v-else class="audio-thumbnail thumbnail-placeholder" />
     <span class="audio-play-button" @click="handleClick">
       <svg
         v-if="!isPlaying"
@@ -36,13 +38,17 @@
     </span>
     <div class="audio-meta">
       <p>
-        <span class="audio-title">{{ title }}</span>
-        by
-        <span class="audio-creator">{{ creator }}</span>
+        <span class="audio-provider">{{ provider }}</span>
+        <a :href="landingUrl" class="audio-link">
+          <span class="audio-title">{{ title }}</span>
+          by
+          <span class="audio-creator">{{ creator }}</span>
+        </a>
       </p>
       <p>
+        <LicenseIcons :license="license.toLowerCase()" />
         <span class="audio-icons">{{ license }}</span>
-        <span class="audio-duration">{{ duration }}</span>
+        <span class="audio-duration">{{ durationString }}</span>
       </p>
     </div>
     <div ref="ws" class="waveform" />
@@ -61,6 +67,8 @@ export default {
     title: {},
     wavesurferCreator: {},
     peaks: {},
+    provider: {},
+    landingUrl: {},
   },
   data: () => ({
     wavesurfer: null,
@@ -75,6 +83,15 @@ export default {
       height: 30,
     },
   }),
+  computed: {
+    durationString() {
+      let minutes = Math.floor(this.duration / 60)
+      let seconds = this.duration % 60
+      return `${minutes
+        .toString()
+        .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+    },
+  },
   mounted() {
     const wsOptions = { ...this.wsOptions, container: this.$refs.ws }
     this.wavesurfer = new this.wavesurferCreator.create(wsOptions)
@@ -123,6 +140,22 @@ $waveform-height: 30px;
   grid-area: thumbnail;
 }
 
+.thumbnail-placeholder {
+  background-color: #333;
+  position: relative;
+  &::after {
+    content: 'OV';
+    font-size: 3rem;
+    place-items: center;
+    color: white;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+  }
+}
+
 .audio-play-button {
   grid-area: play;
 }
@@ -132,9 +165,16 @@ $waveform-height: 30px;
   grid-area: meta;
   justify-content: space-between;
 
-  span:not(.audio-creator) {
+  .audio-title {
     font-weight: bold;
   }
+}
+.audio-meta .audio-provider {
+  margin-right: 0.5rem;
+  font-weight: normal;
+}
+.audio-link {
+  color: #333;
 }
 
 .waveform {
