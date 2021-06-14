@@ -8,7 +8,7 @@
   >
     <h3 class="title is-5 b-header">Audio Example</h3>
     <av-waveform
-      :audio-src="audioList[4].src"
+      :audio-src="audioList[1].src"
       :cors-anonym="true"
       :canv-top="true"
       :playtime-with-ms="false"
