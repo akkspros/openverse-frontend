@@ -119,6 +119,7 @@ export default {
         creator: 'copperhead',
         duration: 224,
         license: 'BY',
+        peaks: true,
         provider: 'ccmixter',
       },
       {
