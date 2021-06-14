@@ -7,6 +7,12 @@
     class="padding-normal"
   >
     <h3 class="title is-5 b-header">Audio Example</h3>
+    <av-waveform
+      :audio-src="audioList[4].src"
+      :cors-anonym="true"
+      :canv-top="true"
+      :playtime-with-ms="false"
+    ></av-waveform>
     <div class="search-grid-audio" v-if="wavesurferLoaded">
       <SearchGridCellAudio
         v-for="audio in audioList"
@@ -27,11 +33,12 @@
   </section>
 </template>
 <script>
+import AvWaveform from 'vue-audio-visual/src/components/AvWaveform'
 import SearchGridCellAudio from '~/pages/search/SearchGridCellAudio'
 
 export default {
   name: 'AudioPage',
-  components: { SearchGridCellAudio },
+  components: { AvWaveform, SearchGridCellAudio },
   beforeRouteLeave() {
     this.wavesurfer.destroy()
   },

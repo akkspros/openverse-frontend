@@ -106,7 +106,9 @@ export default {
     this.wavesurfer = new this.wavesurferCreator.create(wsOptions)
     if (this.peaks) {
       let peaks = peaksJson['data'].map((val) => val / 32000)
-      this.wavesurfer.load(this.src, peaks)
+      const myAudio = new Audio(this.src)
+      myAudio.crossOrigin = 'anonymous'
+      this.wavesurfer.load(myAudio, peaks)
     } else {
       this.wavesurfer.load(this.src)
     }
