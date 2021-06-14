@@ -75,6 +75,7 @@ export default {
     waveformHeight: 30,
     isPlaying: false,
     wsOptions: {
+      backend: 'MediaElement',
       waveColor: '#b0b0b0',
       progressColor: '#333333',
       cursorColor: '#333333',
@@ -93,10 +94,12 @@ export default {
     },
   },
   mounted() {
-    const wsOptions = { ...this.wsOptions, container: this.$refs.ws }
+    const wsOptions = this.peaks
+      ? { ...this.wsOptions, backend: 'MediaElement', container: this.$refs.ws }
+      : { ...this.wsOptions, container: this.$refs.ws }
     this.wavesurfer = new this.wavesurferCreator.create(wsOptions)
-    console.log('peaks: ', this.peaks)
     if (this.peaks) {
+      console.log('peaks: ', this.peaks)
       let newPeaks = []
       const numPeaks = 1000
       for (let i = 0; i < numPeaks; i++) {
@@ -104,7 +107,6 @@ export default {
       }
       this.wavesurfer.backend.setPeaks(newPeaks, numPeaks)
     }
-    console.log(this.wavesurfer.backend)
     this.wavesurfer.load(this.src)
   },
   methods: {
