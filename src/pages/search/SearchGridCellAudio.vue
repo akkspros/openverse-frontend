@@ -83,6 +83,7 @@ export default {
       backgroundColor: '#ffffff',
       cursorWidth: 1,
       height: 30,
+      responsive: true,
     },
   }),
   computed: {
@@ -96,7 +97,11 @@ export default {
   },
   mounted() {
     const wsOptions = this.peaks
-      ? { ...this.wsOptions, backend: 'MediaElement', container: this.$refs.ws }
+      ? {
+          ...this.wsOptions,
+          // backend: 'MediaElement',
+          container: this.$refs.ws,
+        }
       : { ...this.wsOptions, container: this.$refs.ws }
     this.wavesurfer = new this.wavesurferCreator.create(wsOptions)
     if (this.peaks) {
