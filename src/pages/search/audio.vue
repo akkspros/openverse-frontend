@@ -55,19 +55,6 @@ export default {
         provider: 'jamendo',
       },
       {
-        id: 'audio2',
-        src:
-          'https://mp3d.jamendo.com/?trackid=1157358&format=mp32&from=lJVJyHNhRHiRDKae5Y5BtQ%3D%3D%7CgPkUAo5jXFVp%2FFGS7w5fYg%3D%3D',
-        thumbnail:
-          'https://images.jamendo.com/albums/s138/138887/covers/1.200.jpg?du=1532152255',
-        title: 'You and me',
-        creator: 'JEKK',
-        license: 'BY-NC-ND',
-        duration: 100,
-        peaks: true,
-        provider: 'randomly-generated waveform',
-      },
-      {
         id: 'audio3',
         landingUrl:
           'https://en.wikipedia.org/wiki/File:Christoph_Nolte_-_The_Rocky_Road_-_The_Rocky_Road_To_Dublin.ogg',

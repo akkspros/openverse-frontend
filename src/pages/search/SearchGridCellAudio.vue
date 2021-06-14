@@ -55,6 +55,7 @@
   </div>
 </template>
 <script>
+import peaksJson from './peaks.json'
 export default {
   name: 'SearchGridCellAudio',
   props: {
@@ -99,15 +100,11 @@ export default {
       : { ...this.wsOptions, container: this.$refs.ws }
     this.wavesurfer = new this.wavesurferCreator.create(wsOptions)
     if (this.peaks) {
-      console.log('peaks: ', this.peaks)
-      let newPeaks = []
-      const numPeaks = 1000
-      for (let i = 0; i < numPeaks; i++) {
-        newPeaks.push(Math.random())
-      }
-      this.wavesurfer.backend.setPeaks(newPeaks, numPeaks)
+      let peaks = peaksJson['data'].map((val) => val / 32000)
+      this.wavesurfer.load(this.src, peaks)
+    } else {
+      this.wavesurfer.load(this.src)
     }
-    this.wavesurfer.load(this.src)
   },
   methods: {
     pause() {
