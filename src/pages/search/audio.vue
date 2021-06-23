@@ -7,12 +7,12 @@
     class="padding-normal"
   >
     <h3 class="title is-5 b-header">Audio Example using wavesurfer.js</h3>
-<!--    <av-waveform-->
-<!--      :audio-src="audioList[1].src"-->
-<!--      :cors-anonym="true"-->
-<!--      :canv-top="true"-->
-<!--      :playtime-with-ms="false"-->
-<!--    ></av-waveform>-->
+    <!--    <av-waveform-->
+    <!--      :audio-src="audioList[1].src"-->
+    <!--      :cors-anonym="true"-->
+    <!--      :canv-top="true"-->
+    <!--      :playtime-with-ms="false"-->
+    <!--    ></av-waveform>-->
     <div class="search-grid-audio" v-if="wavesurferLoaded">
       <SearchGridCellAudio
         v-for="audio in audioList"

@@ -7,25 +7,24 @@
     class="padding-normal"
   >
     <h3 class="title is-5 b-header">Audio Example using peaks.js</h3>
-  <div class="search-grid-audio" v-if="wavesurferLoaded">
-    <SearchGridCellAudio2
-      v-for="audio in audioList"
-      :key="audio.id"
-      :audio-id="audio.id"
-      :src="audio.src"
-      :creator="audio.creator"
-      :duration="audio.duration"
-      :license="audio.license"
-      :thumbnail="audio.thumbnail"
-      :title="audio.title"
-      :wavesurferCreator="wavesurferCreator"
-      :peaks="audio.peaks"
-      :provider="audio.provider"
-      :landing-url="audio.landingUrl"
-      :options="options"
-    />
-  </div>
-
+    <div class="search-grid-audio" v-if="wavesurferLoaded">
+      <SearchGridCellAudio2
+        v-for="audio in audioList"
+        :key="audio.id"
+        :audio-id="audio.id"
+        :src="audio.src"
+        :creator="audio.creator"
+        :duration="audio.duration"
+        :license="audio.license"
+        :thumbnail="audio.thumbnail"
+        :title="audio.title"
+        :wavesurferCreator="wavesurferCreator"
+        :peaks="audio.peaks"
+        :provider="audio.provider"
+        :landing-url="audio.landingUrl"
+        :options="options"
+      />
+    </div>
   </section>
 </template>
 <script>
