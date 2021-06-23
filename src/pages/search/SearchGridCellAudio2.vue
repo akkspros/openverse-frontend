@@ -51,11 +51,14 @@
         <span class="audio-duration">{{ durationString }}</span>
       </p>
     </div>
-    <div ref="ws" class="waveform" />
+    <div class="waveform" ref="overview"></div>
+    <audio ref="ws" class="audio" :src="src"></audio>
   </div>
 </template>
 <script>
-import peaksJson from './peaks.json'
+import Peaks from 'peaks.js'
+import wave from './wave.dat'
+
 export default {
   name: 'SearchGridCellAudio',
   props: {
@@ -70,9 +73,11 @@ export default {
     peaks: {},
     provider: {},
     landingUrl: {},
+    options: {},
   },
   data: () => ({
     wavesurfer: null,
+    waveData: null,
     waveformHeight: 30,
     isPlaying: false,
     wsOptions: {
@@ -86,6 +91,14 @@ export default {
       responsive: true,
     },
   }),
+  async fetch() {
+    console.log('FETCH')
+    let response = await fetch(wave)
+    if (response.ok) {
+      let arrayBuffer = await response.arrayBuffer()
+      this.waveData = new Uint8Array(arrayBuffer)
+    }
+  },
   computed: {
     durationString() {
       let minutes = Math.floor(this.duration / 60)
@@ -95,36 +108,40 @@ export default {
         .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
     },
   },
-  mounted() {
-    console.log('Mounted, window : ', window)
-    const wsOptions = this.peaks
-      ? {
-          ...this.wsOptions,
-          // backend: 'MediaElement',
-          container: this.$refs.ws,
-        }
-      : { ...this.wsOptions, container: this.$refs.ws }
-    this.wavesurfer = new this.wavesurferCreator.create(wsOptions)
-    if (this.peaks) {
-      let peaks = peaksJson['data'].map((val) => val / 128)
-      const myAudio = new Audio(this.src)
-      myAudio.crossOrigin = 'anonymous'
-      this.wavesurfer.load(myAudio, peaks)
-    } else {
-      this.wavesurfer.load(this.src)
+  async mounted() {
+    console.log('MOUNTED ')
+    if (typeof window !== 'undefined') {
+      const peaksOptions = {
+        ...this.options,
+        mediaElement: this.$refs.ws,
+        multiChannel: true,
+        containers: {
+          overview: this.$refs.overview,
+        },
+        dataUri: {
+          arraybuffer: 'http://localhost:8000/road_to_dublin_ch.dat',
+        },
+        withCredentials: false,
+      }
+      Peaks.init(peaksOptions, function (err, something) {
+        console.log(err, something)
+        something.on('overview.dblclick', () => {
+          console.log('ready')
+        })
+      })
     }
   },
   methods: {
     pause() {
-      this.wavesurfer.pause()
+      this.$refs.ws.pause()
       this.isPlaying = false
     },
     start() {
-      this.wavesurfer.play()
+      this.$refs.ws.play()
       this.isPlaying = true
     },
     handleClick() {
-      this.wavesurfer.isPlaying() ? this.pause() : this.start()
+      this.isPlaying ? this.pause() : this.start()
     },
   },
 }
@@ -134,15 +151,18 @@ $waveform-height: 30px;
 .audio-container {
   display: grid;
   grid-template-columns: calc(#{$waveform-height} + 2rem) $waveform-height 1fr;
-  grid-template-rows: 1.5rem $waveform-height;
+  grid-template-rows: 1.5rem $waveform-height 2rem;
   grid-template-areas:
     'thumbnail meta meta'
-    'thumbnail play waveform';
+    'thumbnail play waveform'
+    'audio audio audio';
   margin-top: 1rem;
   margin-bottom: 2rem;
   gap: 0.5rem;
 }
-
+.audio {
+  grid-area: audio;
+}
 .audio-thumbnail {
   grid-area: thumbnail;
 }

@@ -6,13 +6,13 @@
     aria-labelledby="audio"
     class="padding-normal"
   >
-    <h3 class="title is-5 b-header">Audio Example</h3>
-    <av-waveform
-      :audio-src="audioList[1].src"
-      :cors-anonym="true"
-      :canv-top="true"
-      :playtime-with-ms="false"
-    ></av-waveform>
+    <h3 class="title is-5 b-header">Audio Example using wavesurfer.js</h3>
+<!--    <av-waveform-->
+<!--      :audio-src="audioList[1].src"-->
+<!--      :cors-anonym="true"-->
+<!--      :canv-top="true"-->
+<!--      :playtime-with-ms="false"-->
+<!--    ></av-waveform>-->
     <div class="search-grid-audio" v-if="wavesurferLoaded">
       <SearchGridCellAudio
         v-for="audio in audioList"
@@ -33,14 +33,19 @@
   </section>
 </template>
 <script>
-import AvWaveform from 'vue-audio-visual/src/components/AvWaveform'
+// import AvWaveform from 'vue-audio-visual/src/components/AvWaveform'
 import SearchGridCellAudio from '~/pages/search/SearchGridCellAudio'
 
 export default {
   name: 'AudioPage',
-  components: { AvWaveform, SearchGridCellAudio },
+  components: {
+    // AvWaveform,
+    SearchGridCellAudio,
+  },
   beforeRouteLeave() {
-    this.wavesurfer.destroy()
+    if (this.wavesurfer) {
+      this.wavesurfer.destroy()
+    }
   },
   data: () => ({
     wavesurfer: null,
@@ -133,14 +138,13 @@ export default {
     ],
     isPlaying: false,
   }),
-  fetch() {
-    if (this.$nuxt.context.wavesurfer) {
-      this.wavesurferCreator = this.$nuxt.context.wavesurfer
-      this.wavesurferLoaded = true
-    }
-  },
   mounted() {
-    this.$fetch()
+    if (typeof window !== 'undefined') {
+      if (this.$nuxt.context.wavesurfer) {
+        this.wavesurferCreator = this.$nuxt.context.wavesurfer
+        this.wavesurferLoaded = true
+      }
+    }
   },
 }
 </script>
