@@ -37,6 +37,9 @@ import wavWaveform from './wav-waveform.json'
       options: ['regular', 'wide'],
       control: 'select',
     },
+    style: {
+      control: false,
+    },
     audio: {
       control: false,
     },
@@ -86,9 +89,14 @@ export const formatExamples = {
 }
 
 export const Template = (args, { argTypes }) => ({
-  template: `<AudioTrack v-bind="$props" :audio="audioObj"/>`,
+  template: `<AudioTrack :style="style" v-bind="$props" :audio="audioObj"/>`,
   components: { AudioTrack },
-  props: Object.keys(argTypes),
+  props: Object.keys(argTypes).filter(
+    (key) => !['style', 'class'].includes(key)
+  ),
+  data() {
+    return { style: args.style }
+  },
   computed: {
     audioObj() {
       return {
@@ -105,13 +113,24 @@ export const Template = (args, { argTypes }) => ({
 
 <ArgsTable of={AudioTrack} />
 
+## Layouts
+
+The component can be rendered in a multiple different layouts, by specifying the
+`layout` prop. The layout can further by customised by the `size` and `aspect`
+props.
+
+### Full layout
+
+The full layout is always a full-width component. It does not support any
+variants in size or aspect.
+
 <Canvas>
-  <Story name="Default">{Template.bind({})}</Story>
+  <Story name="Full">{Template.bind({})}</Story>
 </Canvas>
 
-The component can also be rendered in a multiple different layouts, by
-specifying a `layout`. The layout can further by customised by the `size` and
-`aspect` props.
+### Row layout
+
+Available sizes are 's' and 'm'. This layout does not support aspect.
 
 <Canvas>
   <Story
@@ -128,6 +147,44 @@ specifying a `layout`. The layout can further by customised by the `size` and
     args={{
       layout: 'row',
       size: 'm',
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+### Box layout
+
+Available sizes are 'm' and 'l'. The size 'm' supports a 'wide' aspect.
+
+<Canvas>
+  <Story
+    name="Box (medium)"
+    args={{
+      layout: 'box',
+      size: 'm',
+      style: { width: '256px' },
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Box (medium, wide)"
+    args={{
+      layout: 'box',
+      size: 'm',
+      aspect: 'wide',
+      style: { width: '512px' },
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+  <Story
+    name="Box (large)"
+    args={{
+      layout: 'box',
+      size: 'l',
+      style: { width: '512px' },
     }}
   >
     {Template.bind({})}
