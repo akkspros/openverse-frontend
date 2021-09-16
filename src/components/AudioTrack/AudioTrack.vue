@@ -38,6 +38,7 @@ import AudioController from '~/components/AudioTrack/AudioController.vue'
 
 import Full from '~/components/AudioTrack/layouts/Full.vue'
 import Row from '~/components/AudioTrack/layouts/Row.vue'
+import Box from '~/components/AudioTrack/layouts/Box.vue'
 
 /**
  * Displays the waveform and basic information about the track, along with
@@ -45,7 +46,7 @@ import Row from '~/components/AudioTrack/layouts/Row.vue'
  */
 export default {
   name: 'AudioTrack',
-  components: { AudioController, PlayPause, Full, Row },
+  components: { AudioController, PlayPause, Full, Row, Box },
   props: {
     /**
      * the information about the track, typically from a track's detail endpoint
@@ -99,6 +100,7 @@ export default {
     const layoutMappings = {
       full: 'Full',
       row: 'Row',
+      box: 'Box',
     }
     const layoutComponent = computed(() => layoutMappings[props.layout])
 
