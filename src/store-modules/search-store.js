@@ -155,7 +155,7 @@ const actions = (services) => ({
         }
       })
   },
-  [HANDLE_MEDIA_ERROR]({ commit }, { mediaType, error }) {
+  async [HANDLE_MEDIA_ERROR]({ commit }, { mediaType, error }) {
     let errorMessage
     if (error.response) {
       errorMessage =

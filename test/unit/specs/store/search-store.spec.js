@@ -250,13 +250,9 @@ describe('Search Store', () => {
         mediaType: 'unknown',
         page: 1,
       }
-      try {
-        await action({ commit, dispatch, state }, params)
-      } catch (error) {
-        expect(error.message).toEqual(
-          `Cannot fetch unknown media type "${params.mediaType}"`
-        )
-      }
+      await expect(action({ commit, dispatch, state }, params)).rejects.toThrow(
+        `Cannot fetch unknown media type "${params.mediaType}"`
+      )
     })
 
     it('FETCH_MEDIA on success', async () => {
@@ -325,12 +321,14 @@ describe('Search Store', () => {
         mediaType,
       }
       const action = store.actions(services)[FETCH_MEDIA]
-      try {
-        await action({ commit, dispatch, state }, params)
-      } catch (error) {
-        expect(commit).toHaveBeenCalledWith(FETCH_START_MEDIA, { mediaType })
-        expect(dispatch).toHaveBeenCalledWith('HANDLE_IMAGE_ERROR', error)
-      }
+      await action({ commit, dispatch, state }, params)
+      await expect(services[IMAGE].search).rejects.toEqual('error')
+
+      expect(commit).toHaveBeenCalledWith(FETCH_START_MEDIA, { mediaType })
+      expect(dispatch).toHaveBeenCalledWith('HANDLE_MEDIA_ERROR', {
+        error: 'error',
+        mediaType,
+      })
     })
 
     it('FETCH_MEDIA resets images if page is not defined', async () => {
@@ -391,17 +389,22 @@ describe('Search Store', () => {
       )
     })
 
-    it('FETCH_AUDIO on error', (done) => {
+    it('FETCH_AUDIO on error', async () => {
       services[AUDIO] = {
         getMediaDetail: jest.fn(() => Promise.reject('error')),
       }
       const params = { id: 'foo' }
       const action = store.actions(services)[FETCH_AUDIO]
-      action({ commit, dispatch, state, rootState }, params).catch((error) => {
-        expect(commit).toBeCalledWith(FETCH_START_MEDIA, { mediaType: AUDIO })
-        expect(dispatch).toBeCalledWith('HANDLE_MEDIA_ERROR', error)
+      await action({ commit, dispatch, state, rootState }, params)
+      await expect(services[AUDIO].getMediaDetail).rejects.toEqual('error')
+      expect(commit).toHaveBeenCalledWith(FETCH_START_MEDIA, {
+        mediaType: AUDIO,
       })
-      done()
+
+      expect(dispatch).toHaveBeenLastCalledWith('HANDLE_MEDIA_ERROR', {
+        error: 'error',
+        mediaType: 'audio',
+      })
     })
 
     it('FETCH_AUDIO on 404 doesnt break and commits MEDIA_NOT_FOUND', async () => {
@@ -497,19 +500,12 @@ describe('Search Store', () => {
       })
     })
 
-    it('HANDLE_MEDIA_ERROR throws a new error on error when server did not respond', () => {
+    it('HANDLE_MEDIA_ERROR throws a new error on error when server did not respond', async () => {
       const action = store.actions(services)[HANDLE_MEDIA_ERROR]
       const error = new Error('Server did not respond')
-
-      try {
+      await expect(
         action({ commit }, { mediaType: AUDIO, error })
-      } catch (error) {
-        expect(commit).toHaveBeenCalledWith(FETCH_MEDIA_ERROR, {
-          errorMessage: 'Server did not respond',
-          mediaType: AUDIO,
-        })
-        expect(error.message).toEqual('Error: Server did not respond')
-      }
+      ).rejects.toThrow(error.message)
     })
 
     it('HANDLE_NO_MEDIA throws an error when media count is 0', () => {
